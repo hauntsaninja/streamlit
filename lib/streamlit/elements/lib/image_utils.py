@@ -323,7 +323,7 @@ def image_to_url(
         # `npt.NDArray[Any]` returns a `npt.NDArray[Any]`, so we need to
         # ignore redundant casts below.
         image_data = _np_array_to_bytes(
-            array=cast("npt.NDArray[Any]", image),  # type: ignore[redundant-cast]
+            array=cast("npt.NDArray[Any]", image),
             output_format=output_format,
         )
 
