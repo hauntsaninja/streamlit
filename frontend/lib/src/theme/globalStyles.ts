@@ -446,6 +446,13 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
     cursor: pointer;
   }
 
+  // Set the cursor for all buttons buttons
+  button {
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+  }
+
   // Remove the inheritance of word-wrap in Safari.
   // See https://github.com/twbs/bootstrap/issues/24990
 
