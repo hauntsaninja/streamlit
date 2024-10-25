@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 PILImage: TypeAlias = Union[
     "ImageFile.ImageFile", "Image.Image", "GifImagePlugin.GifImageFile"
 ]
-AtomicImage: TypeAlias = Union[PILImage | "npt.NDArray[Any]" | io.BytesIO | str | bytes]
+AtomicImage: TypeAlias = Union[PILImage, "npt.NDArray[Any]", io.BytesIO, str, bytes]
 
 Channels: TypeAlias = Literal["RGB", "BGR"]
 ImageFormat: TypeAlias = Literal["JPEG", "PNG", "GIF"]
