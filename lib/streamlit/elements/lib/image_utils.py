@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from PIL import GifImagePlugin, Image, ImageFile
 
 PILImage: TypeAlias = Union[
-    ImageFile.ImageFile, Image.Image, GifImagePlugin.GifImageFile
+    "ImageFile.ImageFile", "Image.Image", "GifImagePlugin.GifImageFile"
 ]
 AtomicImage: TypeAlias = Union[PILImage, "npt.NDArray[Any]", io.BytesIO, str, bytes]
 
