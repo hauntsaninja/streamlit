@@ -318,10 +318,6 @@ def image_to_url(
                     "have exactly 3 color channels"
                 )
 
-        # Depending on the version of numpy that the user has installed, the
-        # typechecker may not be able to deduce that indexing into a
-        # `npt.NDArray[Any]` returns a `npt.NDArray[Any]`, so we need to
-        # ignore redundant casts below.
         image_data = _np_array_to_bytes(
             array=cast("npt.NDArray[Any]", image),
             output_format=output_format,
