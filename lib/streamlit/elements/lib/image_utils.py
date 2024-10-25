@@ -24,7 +24,6 @@ from typing_extensions import TypeAlias
 
 from streamlit import runtime, url_util
 from streamlit.errors import StreamlitAPIException
-from streamlit.proto.Image_pb2 import ImageList as ImageListProto
 from streamlit.runtime import caching
 from streamlit.type_util import NumpyShape
 
@@ -33,6 +32,8 @@ if TYPE_CHECKING:
 
     import numpy.typing as npt
     from PIL import GifImagePlugin, Image, ImageFile
+
+    from streamlit.proto.Image_pb2 import ImageList as ImageListProto
 
 PILImage: TypeAlias = Union[
     "ImageFile.ImageFile", "Image.Image", "GifImagePlugin.GifImageFile"
