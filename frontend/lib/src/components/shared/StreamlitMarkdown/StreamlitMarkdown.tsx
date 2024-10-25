@@ -18,6 +18,7 @@ import React, {
   CSSProperties,
   FunctionComponent,
   HTMLProps,
+  memo,
   ReactElement,
   ReactNode,
   useContext,
@@ -671,4 +672,4 @@ export function LinkWithTargetBlank(props: LinkProps): ReactElement {
   )
 }
 
-export default StreamlitMarkdown
+export default memo(StreamlitMarkdown)
