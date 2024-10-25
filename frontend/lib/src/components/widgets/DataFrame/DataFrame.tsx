@@ -34,7 +34,7 @@ import {
   Search,
 } from "@emotion-icons/material-outlined"
 
-import { FormClearHelper } from "@streamlit/lib/src/components/widgets/Form"
+import { useFormClearHelper } from "@streamlit/lib/src/components/widgets/Form"
 import { withFullScreenWrapper } from "@streamlit/lib/src/components/shared/FullScreenWrapper"
 import { Quiver } from "@streamlit/lib/src/dataframes/Quiver"
 import { Arrow as ArrowProto } from "@streamlit/lib/src/proto"
@@ -145,7 +145,8 @@ function DataFrame({
   const dataEditorRef = React.useRef<DataEditorRef>(null)
   const resizableContainerRef = React.useRef<HTMLDivElement>(null)
 
-  const { theme, headerIcons, tableBorderRadius } = useCustomTheme()
+  const { theme, headerIcons, tableBorderRadius, tableBorderWidth } =
+    useCustomTheme()
 
   const {
     libConfig: { enforceDownloadInNewTab = false }, // Default to false, if no libConfig, e.g. for tests
@@ -560,23 +561,13 @@ function DataFrame({
     [columns, theme.textLight]
   )
 
-  // This is required for the form clearing functionality:
-  React.useEffect(() => {
-    if (!element.formId) {
-      return
-    }
+  const onFormCleared = React.useCallback(() => {
+    // Clear the editing state and the selection state
+    resetEditingState()
+    clearSelection()
+  }, [resetEditingState, clearSelection])
 
-    const formClearHelper = new FormClearHelper()
-    formClearHelper.manageFormClearListener(widgetMgr, element.formId, () => {
-      // Clear the editing state and the selection state
-      resetEditingState()
-      clearSelection()
-    })
-
-    return () => {
-      formClearHelper.disconnect()
-    }
-  }, [element.formId, resetEditingState, clearSelection, widgetMgr])
+  useFormClearHelper({ element, widgetMgr, onFormCleared })
 
   const isDynamicAndEditable =
     !isEmptyTable && element.editingMode === DYNAMIC && !disabled
@@ -750,7 +741,7 @@ function DataFrame({
         ref={resizableRef}
         defaultSize={resizableSize}
         style={{
-          border: `1px solid ${theme.borderColor}`,
+          border: `${tableBorderWidth} solid ${theme.borderColor}`,
           borderRadius: `${tableBorderRadius}`,
         }}
         minHeight={minHeight}
