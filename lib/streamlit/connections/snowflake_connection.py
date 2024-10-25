@@ -118,11 +118,11 @@ class SnowflakeConnection(BaseConnection["InternalSnowflakeConnection"]):
 
     **Example 3**
 
-    Snowflake's Python Connector also supports a `connection configuration file
-    <https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-connect#label-python-connection-toml>`_,
-    ``connections.toml``. For example, if you already have a Snowflake
-    connection configured for Snowflake's Python Connector, just pass the
-    connection name to Streamlit.
+    Snowflake's Python Connector supports a `connection configuration file
+    <https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-connect#connecting-using-the-connections-toml-file>`_,
+    which is well integrated with Streamlit's ``SnowflakeConnection``. If you
+    already have one or more connections configured, all you need to do is pass
+    the name of the connection to use.
 
     ``~/.snowflake/connections.toml``:
 
@@ -138,6 +138,59 @@ class SnowflakeConnection(BaseConnection["InternalSnowflakeConnection"]):
 
     >>> import streamlit as st
     >>> conn = st.connection("my_connection", type="snowflake")
+    >>> df = conn.query("SELECT * FROM my_table")
+
+    **Example 4**
+
+    If you have a Snowflake configuration file with a connection named
+    ``my_connection`` as in Example 3, you can pass the connection name through
+    ``secrets.toml``.
+
+    ``.streamlit/secrets.toml``:
+
+    >>> [connections.snowflake]
+    >>> connection_name = "my_connection"
+
+    Your app code:
+
+    >>> import streamlit as st
+    >>> conn = st.connection("snowflake")
+    >>> df = conn.query("SELECT * FROM my_table")
+
+    **Example 5**
+
+    If you have a Snowflake configuration file with a connection named
+    ``my_connection`` as in Example 3, you can set an environment variable to
+    declare it as the default Snowflake connection.
+
+    >>> SNOWFLAKE_DEFAULT_CONNECTION_NAME = "my_connection"
+
+    Your app code:
+
+    >>> import streamlit as st
+    >>> conn = st.connection("snowflake")
+    >>> df = conn.query("SELECT * FROM my_table")
+
+    **Example 6**
+
+    If you have a Snowflake configuration file that defines your ``default``
+    connection, Streamlit will automatically use it if no other connection is
+    declared.
+
+    ``~/.snowflake/connections.toml``:
+
+    >>> [default]
+    >>> account = "xxx-xxx"
+    >>> user = "xxx"
+    >>> password = "xxx"
+    >>> warehouse = "xxx"
+    >>> database = "xxx"
+    >>> schema = "xxx"
+
+    Your app code:
+
+    >>> import streamlit as st
+    >>> conn = st.connection("snowflake")
     >>> df = conn.query("SELECT * FROM my_table")
 
     """
