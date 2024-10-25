@@ -351,34 +351,24 @@ export class MetricsManager {
     const expiration = new Date()
     expiration.setFullYear(new Date().getFullYear() + 1)
 
-    console.log(
-      "Cookie:",
-      anonymousIdCookie,
-      "Local:",
-      anonymousIdLocalStorage
-    )
-
     if (anonymousIdCookie) {
       this.anonymousId = anonymousIdCookie
+
       if (isLocalStoreAvailable) {
         localStorage.setItem(anonymousIdKey, anonymousIdCookie)
       }
-      console.log("== Found anonymous ID in cookie")
     } else if (anonymousIdLocalStorage) {
-      // Remove quotes from localStorage string
+      // Removes excess quotes from localStorage string value
       this.anonymousId = JSON.parse(anonymousIdLocalStorage)
+
       setCookie(anonymousIdKey, this.anonymousId, expiration)
-      console.log("== Found anonymous ID in localStorage")
     } else {
       this.anonymousId = uuidv4()
-      console.log("== Generating new anonymous ID", this.anonymousId)
 
       setCookie(anonymousIdKey, this.anonymousId, expiration)
       if (isLocalStoreAvailable) {
         localStorage.setItem(anonymousIdKey, this.anonymousId)
       }
     }
-
-    console.log("== Anonymous ID:", this.anonymousId)
   }
 }
