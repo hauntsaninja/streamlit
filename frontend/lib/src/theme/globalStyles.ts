@@ -114,7 +114,7 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
   h1 {
     font-family: ${theme.genericFonts.headingFont};
     font-weight: ${theme.fontWeights.extrabold};
-
+    font-size: 2.75rem;
     // Use rem so we can remove it when first child, knowing that the
     // element-container above always adds 1rem.
     padding: 1.25rem 0 1rem 0;
@@ -126,6 +126,7 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
   h2 {
     font-family: ${theme.genericFonts.headingFont};
     font-weight: ${theme.fontWeights.bold};
+    font-size: 2.25rem;
     letter-spacing: -0.005em;
 
     // Use rem so we can remove it when first child, knowing that the
@@ -139,6 +140,7 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
   h3 {
     font-family: ${theme.genericFonts.headingFont};
     font-weight: ${theme.fontWeights.bold};
+    font-size: 1.75rem;
     letter-spacing: -0.005em;
 
     // Use rem so we can remove it when first child, knowing that the
@@ -152,6 +154,7 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
   h4 {
     font-family: ${theme.genericFonts.headingFont};
     font-weight: ${theme.fontWeights.bold};
+    font-size: 1.5rem;
     padding: 0.75rem 0 1rem 0;
     margin: 0;
     line-height: 1.2;
@@ -160,6 +163,7 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
   h5 {
     font-family: ${theme.genericFonts.headingFont};
     font-weight: ${theme.fontWeights.bold};
+    font-size: 1.25rem;
     padding: 0 0 1rem 0;
     margin: 0;
     line-height: 1.2;
@@ -168,6 +172,7 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
   h6 {
     font-family: ${theme.genericFonts.headingFont};
     font-weight: ${theme.fontWeights.bold};
+    font-size: 1rem;
     padding: 0 0 1rem 0;
     margin: 0;
     line-height: 1.2;
@@ -248,11 +253,49 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
     font-weight: ${theme.fontWeights.extrabold};
   }
 
+  // Small
+
+  small {
+    font-size: ${theme.fontSizes.sm};
+  }
+
+  // Mark
+
+  mark {
+    padding: 0.2em;
+    background-color: ${theme.colors.secondaryBg};
+  }
+
+  // Links
+
+  a {
+    color: ${theme.colors.primary};
+    text-decoration: underline;
+
+    &:hover {
+      color: ${darken(theme.colors.primary, 0.15)};
+    }
+  }
+
+  // And undo these styles for placeholder links/named anchors (without href).
+  // It would be more straightforward to just use a[href] in previous block, but that
+  // causes specificity issues in many other styles that are too complex to fix.
+  // See https://github.com/twbs/bootstrap/issues/19402
+
+  a:not([href]):not([class]) {
+    &,
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+
   // Code
 
   pre,
   code,
   kbd {
+    font-size: 1em;
     font-family: ${theme.genericFonts.codeFont};
   }
 
@@ -260,10 +303,13 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
     padding: 0.2rem 0.4rem;
     color: ${theme.colors.codeTextColor};
     background-color: ${theme.colors.codeHighlightColor};
+    font-size: ${theme.fontSizes.sm};
+    border-radius: ${theme.radii.md};
 
     kbd {
       padding: 0;
       font-weight: ${theme.fontWeights.bold};
+      font-size: 1em;
     }
   }
 
@@ -344,6 +390,7 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
     margin: 0; // 1
     font-family: inherit;
     line-height: inherit;
+    font-size: inherit;
   }
 
   // Show the overflow in Edge
@@ -365,6 +412,13 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
   // Details at https://github.com/twbs/bootstrap/pull/30562
   [role="button"] {
     cursor: pointer;
+  }
+
+  // Set the cursor for all buttons buttons
+  button {
+    &:not(:disabled) {
+      cursor: pointer;
+    }
   }
 
   // Remove the inheritance of word-wrap in Safari.
@@ -398,6 +452,46 @@ export const globalStyles = (theme: EmotionTheme): SerializedStyles => css`
   ::-moz-focus-inner {
     padding: 0;
     border-style: none;
+  }
+
+  // 1. Textareas should really only resize vertically so they don't break their (horizontal) containers.
+
+  textarea {
+    resize: vertical; // 1
+  }
+
+  // 1. Browsers set a default min-width: min-content; on fieldsets,
+  //    unlike e.g. <div>s, which have min-width: 0; by default.
+  //    So we reset that to ensure fieldsets behave more like a standard block element.
+  //    See https://github.com/twbs/bootstrap/issues/12359
+  //    and https://html.spec.whatwg.org/multipage/#the-fieldset-and-legend-elements
+  // 2. Reset the default outline behavior of fieldsets so they don't affect page layout.
+
+  fieldset {
+    min-width: 0; // 1
+    padding: 0; // 2
+    margin: 0; // 2
+    border: 0; // 2
+  }
+
+  // 1. By using float: left, the legend will behave like a block element.
+  //    This way the border of a fieldset wraps around the legend if present.
+  // 2. Correct the text wrapping in Edge.
+  // 3. Fix wrapping bug.
+  //    See https://github.com/twbs/bootstrap/issues/29712
+
+  legend {
+    float: left; // 1
+    width: 100%;
+    padding: 0;
+    margin-bottom: ${theme.spacing.sm};
+    font-size: inherit;
+    line-height: inherit;
+    white-space: normal; // 2
+
+    + * {
+      clear: left; // 3
+    }
   }
 
   // Fix height of inputs with a type of datetime-local, date, month, week, or time
